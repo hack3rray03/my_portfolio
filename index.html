@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ray Mmako | Web Developer & Security Enthusiast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0a0c0f;
+      --bg2:       #0f1318;
+      --bg3:       #141920;
+      --border:    #1e2730;
+      --green:     #00ff88;
+      --green-dim: #00cc6a;
+      --green-glow:#00ff8833;
+      --amber:     #ffb300;
+      --text:      #c8d6e5;
+      --text-dim:  #6b7f94;
+      --text-faint:#2e3d4e;
+      --white:     #eef4fb;
+      --mono:      'Share Tech Mono', monospace;
+      --sans:      'Barlow', sans-serif;
+      --display:   'Barlow Condensed', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SCAN-LINE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 150px;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,12,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--green);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--text-dim); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--text-faint) 1px, transparent 1px),
+        linear-gradient(90deg, var(--text-faint) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.15;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .hero-content { position: relative; max-width: 900px; }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--green);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-name .accent { color: var(--green); }
+
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title .sep { color: var(--border); margin: 0 0.5rem; }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #000;
+      border: 1px solid var(--green);
+      font-weight: bold;
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--green);
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* ── TERMINAL TICKER ── */
+    .terminal-bar {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .terminal-inner {
+      display: inline-block;
+      animation: scroll-ticker 30s linear infinite;
+    }
+
+    @keyframes scroll-ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .ticker-item { margin-right: 4rem; }
+    .ticker-item .label { color: var(--green); margin-right: 0.5rem; }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 6rem 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--green);
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+
+    .about-text p strong { color: var(--text); }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      background: var(--bg2);
+      padding: 1.5rem;
+    }
+
+    .stat-num {
+      font-family: var(--display);
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-full { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .skill-card {
+      background: var(--bg2);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .skill-card:hover { background: var(--bg3); }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+    }
+
+    .skill-card.web::before { background: var(--green); }
+    .skill-card.sec::before { background: var(--amber); }
+    .skill-card.doc::before { background: #5b9cf6; }
+
+    .skill-icon {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .skill-card.web .skill-icon { color: var(--green); }
+    .skill-card.sec .skill-icon { color: var(--amber); }
+    .skill-card.doc .skill-icon { color: #5b9cf6; }
+
+    .skill-card h3 {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-card p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .skill-card.web .tag { background: #00ff8815; color: var(--green); border: 1px solid #00ff8830; }
+    .skill-card.sec .tag { background: #ffb30015; color: var(--amber); border: 1px solid #ffb30030; }
+    .skill-card.doc .tag { background: #5b9cf615; color: #5b9cf6; border: 1px solid #5b9cf630; }
+    .skill-card.net::before { background: #b06ef3; }
+.skill-card.net .skill-icon { color: #b06ef3; }
+.skill-card.net .tag { background: #b06ef315; color: #b06ef3; border: 1px solid #b06ef330; }
+
+    /* ── SERVICES ── */
+    .services-wrap { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+
+    .services-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      background: var(--bg2);
+      padding: 2rem;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .service-row:hover { background: var(--bg3); }
+
+    .service-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    .service-info h3 {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+
+    .service-info p { font-size: 0.88rem; color: var(--text-dim); }
+
+    .service-badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge-green { background: #00ff8815; color: var(--green); border: 1px solid #00ff8830; }
+    .badge-amber { background: #ffb30015; color: var(--amber); border: 1px solid #ffb30030; }
+
+    /* ── PROJECTS ── */
+    .projects-wrap { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .project-card {
+      background: var(--bg2);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .project-card:hover { background: var(--bg3); }
+
+    .project-card:hover .project-arrow { transform: translate(4px, -4px); }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-type {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .project-arrow {
+      font-size: 1rem;
+      color: var(--text-dim);
+      transition: transform 0.2s;
+    }
+
+    .project-card h3 {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .project-link:hover { color: var(--green); }
+
+    /* ── CONTACT ── */
+    .contact-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem 8rem;
+    }
+
+    .contact-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .contact-left h2 .g { color: var(--green); }
+
+    .contact-left p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .contact-item .ci-label {
+      color: var(--green);
+      min-width: 80px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--green); }
+
+    .form-group select option { background: var(--bg2); }
+
+    textarea { min-height: 120px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+
+    footer span { color: var(--green); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── CURSOR BLINK ── */
+    .cursor {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.1em;
+      background: var(--green);
+      margin-left: 0.1em;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      section, .skills-full, .services-wrap, .projects-wrap, .contact-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-box { grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+      .service-row { grid-template-columns: 1fr; gap: 0.5rem; }
+      .service-num { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Ray<span>Mmako</span><span class="cursor"></span></div>
+    <ul class="nav-links">
+      <li><a href="#about">./about</a></li>
+      <li><a href="#skills">./skills</a></li>
+      <li><a href="#services">./services</a></li>
+      <li><a href="#projects">./projects</a></li>
+      <li><a href="#contact">./contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Available for freelance work · Johannesburg, ZA</div>
+      <h1 class="hero-name">Ray<span class="accent">Mmako</span></h1>
+      <div class="hero-title">
+        Web Developer<span class="sep">//</span>Security Enthusiast
+      </div>
+      <p class="hero-desc">
+        I build fast, hand-coded websites for small businesses — and I'm working toward a career in penetration testing. Clean code meets a security-first mindset.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMINAL TICKER -->
+  <div class="terminal-bar">
+    <div class="terminal-inner">
+      <span class="ticker-item"><span class="label">STATUS:</span> Open to freelance projects</span>
+      <span class="ticker-item"><span class="label">STACK:</span> HTML · CSS · JavaScript · Node.js</span>
+      <span class="ticker-item"><span class="label">LEARNING:</span> Penetration Testing · Digital Forensics</span>
+      <span class="ticker-item"><span class="label">LOCATION:</span> Johannesburg, Gauteng, ZA</span>
+      <span class="ticker-item"><span class="label">HOSTING:</span> Xneelo · Netlify</span>
+      <span class="ticker-item"><span class="label">DOCS:</span> Quotations · Invoices · Company Profiles</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item"><span class="label">STATUS:</span> Open to freelance projects</span>
+      <span class="ticker-item"><span class="label">STACK:</span> HTML · CSS · JavaScript · Node.js</span>
+      <span class="ticker-item"><span class="label">LEARNING:</span> Penetration Testing · Digital Forensics</span>
+      <span class="ticker-item"><span class="label">LOCATION:</span> Johannesburg, Gauteng, ZA</span>
+      <span class="ticker-item"><span class="label">HOSTING:</span> Xneelo · Netlify</span>
+      <span class="ticker-item"><span class="label">DOCS:</span> Quotations · Invoices · Company Profiles</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header fade-up">
+      <span class="section-num">01</span>
+      <h2 class="section-title">About</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid fade-up">
+      <div class="about-text">
+        <p>
+          I'm a freelance web developer and document services provider based in Johannesburg, operating under <strong>IDS</strong>. I specialise in hand-coded websites — no page builders, no bloat — designed and built from scratch for small businesses that need something real.
+        </p>
+        <p>
+          My background spans full-cycle web delivery: design, development, deployment, and hosting on Xneelo and Netlify. Alongside my client work, I'm actively building toward a career in <strong>cybersecurity</strong> — specifically penetration testing and digital forensics.
+        </p>
+        <p>
+          Web app pentesting is a natural progression from web development. I understand how sites are built, which means I understand how they break.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Client Projects</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Hand-Coded</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">ZA</div>
+          <div class="stat-label">Based In SA</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">IDS</div>
+          <div class="stat-label">Trading Name</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <div class="skills-full" id="skills">
+    <div class="section-header fade-up">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card web fade-up">
+        <div class="skill-icon">// WEB_DEV</div>
+        <h3>Web Development</h3>
+        <p>Hand-coded sites built for speed, clarity, and longevity. No WordPress, no drag-and-drop — just clean, purposeful code deployed properly.</p>
+        <div class="skill-tags">
+          <span class="tag">HTML5</span>
+          <span class="tag">CSS3</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Formspree</span>
+          <span class="tag">Netlify</span>
+          <span class="tag">Xneelo</span>
+        </div>
+      </div>
+      <div class="skill-card net fade-up">
+  <div class="skill-icon">// NETWORKING</div>
+  <h3>Network Setup & Config</h3>
+  <p>Hands-on experience setting up and configuring networks — routers, switches, firewalls, and segmentation. Comfortable working at both the hardware and software layer.</p>
+  <div class="skill-tags">
+    <span class="tag">TCP/IP</span>
+    <span class="tag">DNS</span>
+    <span class="tag">DHCP</span>
+    <span class="tag">VLANs</span>
+    <span class="tag">pfSense</span>
+    <span class="tag">OPNsense</span>
+    <span class="tag">Wi-Fi</span>
+    <span class="tag">Suricata</span>
+  </div>
+</div>
+      <div class="skill-card sec fade-up">
+        <div class="skill-icon">// SECURITY</div>
+        <h3>Security & Homelab</h3>
+        <p>Actively studying penetration testing and digital forensics. Running a homelab with network security tools, SIEM, and local LLMs to build hands-on skills.</p>
+        <div class="skill-tags">
+          <span class="tag">Pentesting</span>
+          <span class="tag">OSINT</span>
+          <span class="tag">Wazuh</span>
+          <span class="tag">pfSense</span>
+          <span class="tag">Suricata</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Linux</span>
+        </div>
+      </div>
+      <div class="skill-card doc fade-up">
+        <div class="skill-icon">// DOC_SERVICES</div>
+        <h3>Document Services</h3>
+        <p>Professional business documents for small companies — quotations, invoices, company profiles, and legal agreements. Branded and ready to send.</p>
+        <div class="skill-tags">
+          <span class="tag">Quotations</span>
+          <span class="tag">Invoices</span>
+          <span class="tag">Co. Profiles</span>
+          <span class="tag">Agreements</span>
+          <span class="tag">Word/DOCX</span>
+          <span class="tag">PDF</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="services-wrap" id="services">
+    <div class="section-header fade-up">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Services</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="services-list">
+      <div class="service-row fade-up">
+        <div class="service-num">S-01</div>
+        <div class="service-info">
+          <h3>Website Design & Development</h3>
+          <p>Hand-coded, fully responsive websites — from single landing pages to multi-section business sites.</p>
+        </div>
+        <span class="service-badge badge-green">Available</span>
+      </div>
+      <div class="service-row fade-up">
+        <div class="service-num">S-02</div>
+        <div class="service-info">
+          <h3>Hosting & Deployment</h3>
+          <p>Domain setup, Xneelo/Netlify hosting, SSL configuration, and ongoing maintenance.</p>
+        </div>
+        <span class="service-badge badge-green">Available</span>
+      </div>
+      <div class="service-row fade-up">
+        <div class="service-num">S-03</div>
+        <div class="service-info">
+          <h3>Business Document Services</h3>
+          <p>Branded quotations, invoices, company profiles, and custom legal/hiring agreements.</p>
+        </div>
+        <span class="service-badge badge-green">Available</span>
+      </div>
+      <div class="service-row fade-up">
+        <div class="service-num">S-04</div>
+        <div class="service-info">
+          <h3>Web Security Consulting</h3>
+          <p>Basic web application security assessments — in training; available for small business engagements.</p>
+        </div>
+        <span class="service-badge badge-amber">In Training</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="projects-wrap" id="projects">
+    <div class="section-header fade-up">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="project-card fade-up">
+  <div class="project-meta">
+    <span class="project-type">// Client · Web Dev</span>
+    <span class="project-arrow">↗</span>
+  </div>
+  <h3>Kalapeng Guesthouse</h3>
+  <p>
+    Website design and development for a local guesthouse. Focused on clean layout, booking-focused UX, and mobile responsiveness. Currently in development.
+  </p>
+  <div class="skill-tags" style="margin-bottom:1rem;">
+    <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">HTML/CSS</span>
+    <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">Responsive Design</span>
+    <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">UX</span>
+  </div>
+  <span class="project-link" style="cursor:default;">kalapengguesthouse.co.za →</span>
+</div>
+    <div class="projects-grid">
+      <div class="project-card fade-up">
+        <div class="project-meta">
+          <span class="project-type">// Client · Web Dev</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <h3>A1 Mag & Tyre</h3>
+        <p>Full business website for a fitment centre in Burgersfort, Limpopo. Hero design, service pages, product listings, quote form, and Xneelo deployment. Black, gold & grey luxury aesthetic.</p>
+        <div class="skill-tags" style="margin-bottom:1rem;">
+          <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">HTML/CSS</span>
+          <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">Formspree</span>
+          <span class="tag" style="background:#00ff8815;color:var(--green);border:1px solid #00ff8830;">Xneelo</span>
+        </div>
+        <a href="https://a1magandtyre.co.za" target="_blank" class="project-link">a1magandtyre.co.za →</a>
+      </div>
+      <div class="project-card fade-up">
+        <div class="project-meta">
+          <span class="project-type">// Client · Docs</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <h3>Shemhu Construction Hiring Agreement</h3>
+        <p>Legal equipment hiring agreement for Shemhu Construction and Projects (Pty) Ltd — covering payment clauses, monthly billing schedules, and contractor protections under South African law.</p>
+        <div class="skill-tags" style="margin-bottom:1rem;">
+          <span class="tag" style="background:#5b9cf615;color:#5b9cf6;border:1px solid #5b9cf630;">DOCX</span>
+          <span class="tag" style="background:#5b9cf615;color:#5b9cf6;border:1px solid #5b9cf630;">Legal Drafting</span>
+        </div>
+        <span class="project-link" style="cursor:default;">Confidential Document</span>
+      </div>
+      <div class="project-card fade-up">
+        <div class="project-meta">
+          <span class="project-type">// Personal · Homelab</span>
+          <span class="project-arrow">↗</span>
+        </div>
+        <h3>Security Homelab</h3>
+        <p>Self-hosted security environment built for learning — Wazuh SIEM, OPNsense firewall, Suricata IDS, Ollama local LLM, and Docker services on repurposed ThinkPad hardware.</p>
+        <div class="skill-tags" style="margin-bottom:1rem;">
+          <span class="tag" style="background:#ffb30015;color:var(--amber);border:1px solid #ffb30030;">Linux</span>
+          <span class="tag" style="background:#ffb30015;color:var(--amber);border:1px solid #ffb30030;">Docker</span>
+          <span class="tag" style="background:#ffb30015;color:var(--amber);border:1px solid #ffb30030;">Wazuh</span>
+          <span class="tag" style="background:#ffb30015;color:var(--amber);border:1px solid #ffb30030;">Networking</span>
+        </div>
+        <span class="project-link" style="cursor:default;">Ongoing Build</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-wrap" id="contact">
+    <div class="section-header fade-up">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-box fade-up">
+      <div class="contact-left">
+        <h2>Let's<br><span class="g">Build</span><br>Something.</h2>
+        <p>Got a project in mind? Need a website, business documents, or just want to talk shop? I'm based in Johannesburg and work with clients across South Africa.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <span class="ci-label">LOCATION</span>
+            <span>Johannesburg, Gauteng</span>
+          </div>
+          <div class="contact-item">
+            <span class="ci-label">BUSINESS</span>
+            <span>IDS</span>
+          </div>
+          <div class="contact-item">
+            <span class="ci-label">STATUS</span>
+            <span style="color: var(--green);">● Available for work</span>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" action="https://formspree.io/f/xgoroeee" method="POST">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" name="name" placeholder="Your name" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select name="service">
+            <option value="">Select a service...</option>
+            <option>Website Design & Development</option>
+            <option>Hosting & Deployment</option>
+            <option>Business Document Services</option>
+            <option>Web Security Consulting</option>
+            <option>Other / General Inquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea name="message" placeholder="Tell me about your project..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Send Message →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ray Mmako</span> · IDS · Johannesburg, ZA
+    <div>Built by hand · <span>No frameworks. No bloat.</span></div>
+  </footer>
+
+  <script>
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Contact form stub
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.textContent = 'Message Sent ✓';
+      btn.style.background = 'var(--green)';
+      btn.disabled = true;
+      // Wire up to Formspree or your preferred handler here
+    }
+  </script>
+</body>
+</html>
