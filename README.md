@@ -1,4 +1,4 @@
-# D'Antony | Web Developer & Security Enthusiast
+# Ray | Web Developer & Security Enthusiast
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-Live-00ff88?style=flat-square)](https://d3mxnrj00.github.io/my_portfolio/)
 [![Location](https://img.shields.io/badge/Location-Johannesburg%2C%20ZA-blue?style=flat-square)]()
