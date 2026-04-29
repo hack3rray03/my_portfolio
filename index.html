@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -467,7 +466,7 @@
     .project-card:hover { background: var(--bg3); }
 
     .project-screenshot {
-      width: 100%; height: 180px;
+      width: 100%; height: 260px;
       overflow: hidden;
       position: relative;
       background: var(--bg3);
@@ -1074,11 +1073,6 @@
     <div class="project-featured fade-up">
       <div class="project-featured-img">
         <img src="webpage_screenshots/a1_webpage.png" alt="A1 Mag & Tyre" />
-        <div class="project-img-placeholder">
-          <span>[ add screenshot ]</span>
-          <span class="ph-domain">screenshots/a1magandtyre.png</span>
-          <span style="margin-top:0.5rem;color:var(--text-faint);font-size:0.6rem;">Chrome → F12 → Capture Screenshot</span>
-        </div>
       </div>
       <div class="project-featured-info">
         <div>
@@ -1106,10 +1100,8 @@
       <div class="project-card fade-up">
         <div class="project-screenshot">
           <img src="webpage_screenshots/kalapeng_webpage.png" alt="Kalapeng Guesthouse" />
-          <div class="screenshot-placeholder">
-            <span class="ph-icon">🏡</span>
-            <span>screenshots/kalapeng.png</span>
-          </div>
+          <div class="screenshot-overlay"></div>
+          <div style="position:absolute;inset:0;background:rgba(10,12,15,0.35);pointer-events:none;"></div>
         </div>
         <div class="project-body">
           <div class="project-meta">
