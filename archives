@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Projects | Ray Mmako</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:          #0a0c0f;
+      --bg2:         #0f1318;
+      --bg3:         #141920;
+      --border:      #1e2730;
+      --green:       #00ff88;
+      --green-dim:   #00cc6a;
+      --green-glow:  #00ff8833;
+      --amber:       #ffb300;
+      --text:        #c8d6e5;
+      --text-dim:    #6b7f94;
+      --text-faint:  #2e3d4e;
+      --white:       #eef4fb;
+      --mono:        'Share Tech Mono', monospace;
+      --sans:        'Barlow', sans-serif;
+      --display:     'Barlow Condensed', sans-serif;
+
+      /* ── aliases to match index palette ── */
+      --muted:       #6b7f94;   /* same as --text-dim  */
+      --muted-light: #c8d6e5;   /* same as --text      */
+      --surface:     #0f1318;   /* same as --bg2       */
+      --border-mid:  #1e2730;   /* same as --border    */
+      --green-faint: #00ff8808; /* very subtle green tint */
+      --green-hover: #00ff880d; /* row hover tint      */
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── SCANLINE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3.5rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-logo span {
+      color: var(--muted-light);
+      font-weight: 400;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted-light);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--green);
+    }
+
+    .back-link svg {
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-3px);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      margin-bottom: 2.5rem;
+    }
+
+    .header-prompt {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-prompt::before {
+      content: '> ';
+      color: var(--green);
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin-bottom: 0.6rem;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted-light);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      padding: 5px 14px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: all 0.18s;
+      outline: none;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-faint);
+    }
+
+    .filter-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-faint);
+    }
+
+    /* ── TABLE ── */
+    .table-wrapper {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      text-align: left;
+      padding: 13px 18px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 400;
+      font-family: 'Share Tech Mono', monospace;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+
+    th:hover {
+      color: #fff;
+    }
+
+    th.sorted::after {
+      content: ' ↑';
+      font-size: 9px;
+      opacity: 0.7;
+    }
+
+    th.sorted.desc::after {
+      content: ' ↓';
+    }
+
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-mid);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.12s;
+    }
+
+    tbody tr:hover td {
+      background: var(--green-hover);
+    }
+
+    .col-year {
+      color: var(--green-dim);
+      font-size: 12px;
+      white-space: nowrap;
+      width: 60px;
+    }
+
+    .col-name {
+      color: #e2fff2;
+      min-width: 180px;
+    }
+
+    .col-name a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .col-name a:hover {
+      color: var(--green);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .col-client {
+      color: var(--muted-light);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-width: 160px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 9px;
+      border: 1px solid var(--border);
+      color: var(--green-dim);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .col-link a {
+      color: var(--green);
+      font-size: 11px;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      opacity: 0.75;
+      transition: opacity 0.15s;
+    }
+
+    .col-link a:hover {
+      opacity: 1;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .col-link .no-link {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .tw-text { color: var(--green-dim); }
+
+    .tw-cursor {
+      display: inline-block;
+      width: 0.5em; height: 0.9em;
+      background: var(--green);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── FOOTER COUNT ── */
+    .footer-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1.2rem;
+      letter-spacing: 0.07em;
+    }
+
+    .footer-count span {
+      color: var(--green);
+    }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      padding: 3rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: var(--green-dim);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--green);
+      text-decoration: underline;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .page {
+        padding: 2rem 1rem 4rem;
+      }
+
+      .col-client,
+      .col-link {
+        display: none;
+      }
+
+      th:nth-child(3),
+      th:nth-child(5) {
+        display: none;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="c:\d3 webpage\index.html">Ray<span>Mmako</span></a>
+    <a class="back-link" href="c:\d3 webpage\index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.5 2.5L4 7L8.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to Portfolio
+    </a>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="header">
+    <p class="header-prompt">ls -la ./projects --all</p>
+    <h1>All Projects</h1>
+    <p class="header-sub">// <span id="typewriter" class="tw-text"></span><span class="tw-cursor"></span></p>
+  </header>
+
+  <!-- FILTERS -->
+  <div class="controls">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="applyFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="applyFilter('client', this)">Client Work</button>
+    <button class="filter-btn" onclick="applyFilter('web', this)">Web Dev</button>
+    <button class="filter-btn" onclick="applyFilter('document', this)">Documents</button>
+    <button class="filter-btn" onclick="applyFilter('security', this)">Security</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table id="archive-table" aria-label="Project archive">
+      <thead>
+        <tr>
+          <th onclick="sortBy('year')" id="th-year">Year</th>
+          <th onclick="sortBy('name')" id="th-name">Project</th>
+          <th onclick="sortBy('client')" id="th-client">Client / Context</th>
+          <th>Built with</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <p class="footer-count" id="count-label"></p>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Designed &amp; hand-coded by <a href="index.html">Ray Mmako</a> &mdash; IDS Web &amp; Document Services &mdash; Johannesburg, ZA</p>
+  </footer>
+
+</div>
+
+<script>
+  const projects = [
+    {
+      year: 2026,
+      name: "A1 Mag & Tyre Website",
+      client: "A1 Mag & Tyre",
+      category: ["client", "web"],
+      tags: ["HTML", "CSS", "JS", "Formspree", "Xneelo"],
+      link: "https://a1magandtyre.co.za",
+      linkLabel: "a1magandtyre.co.za"
+    },
+    {
+      year: 2026,
+      name: "Kalapeng Bakone Guesthouse",
+      client: "Kalapeng Bakone",
+      category: ["client", "web"],
+      tags: ["HTML", "CSS", "JS", "WhatsApp API", "Netlify"],
+      link: "https://kalapengguesthouse.netlify.app/",
+      linkLabel: "kalapengguesthouse.netlify.app"
+    },
+    {
+      year: 2026,
+      name: "RWN Trading Website",
+      client: "RWN Trading & Projects",
+      category: ["client", "web"],
+      tags: ["HTML", "CSS", "JS"],
+      link: null,
+      linkLabel: null
+    },
+    
+    {
+      year: 2026,
+      name: "Influencer Brand Demo Page",
+      client: "IDS Demo",
+      category: ["web"],
+      tags: ["HTML", "CSS", "JS", "Luxury Editorial"],
+      link: "https://nombulelommako.netlify.app/", 
+      linkLabel: "nombulelommako.netlify.app"
+    },
+    {
+      year: 2026,
+      name: "Documents and Portfolios",
+      client: "IDS customer base",
+      category: ["client", "document"],
+      tags: ["Legal Doc", "Word"],
+      link: null,
+      linkLabel: null
+    },
+    
+    {
+      year: 2026,
+      name: "IDS Business Website",
+      client: "IDS (Self)",
+      category: ["web"],
+      tags: ["HTML", "CSS", "JS", "Netlify"],
+      link: "https://idsprojects.netlify.app/",
+      linkLabel: "idsprojects.netlify.app"
+    },
+    {
+      year: 2026,
+      name: "Dev Portfolio",
+      client: "Personal",
+      category: ["web"],
+      tags: ["HTML", "CSS", "JS", "GitHub Pages", "Terminal Theme"],
+      link: "https://hack3rray03.github.io/my_portfolio/",
+      linkLabel: "hack3rray03.github.io"
+    },
+    {
+      year: 2026,
+      name: "H3 News",
+      client: "Personal",
+      category: ["web"],
+      tags: ["HTML", "CSS", "JS", "RSS"]
+    },
+    {
+      year: 2024,
+      name: "Homelab SIEM Setup",
+      client: "Personal Lab",
+      category: ["security"],
+      tags: ["Mikrotik", "Wazuh", "OPNsense", "Suricata", "Docker", "ThinkPad"],
+    },
+    {
+      year: 2026,
+      name: "DVWA Penetration Practice",
+      client: "Personal Lab",
+      category: ["security"],
+      tags: ["Kali Linux", "DVWA", "Metasploit", "WSL2"],
+      link: null,
+      linkLabel: null
+    },
+  ];
+
+  /* ── STATE ── */
+  let currentFilter = 'all';
+  let sortCol      = 'year';
+  let sortDir      = 'desc';
+
+  /* ── RENDER ── */
+  function render() {
+    let data = projects.filter(p =>
+      currentFilter === 'all' || p.category.includes(currentFilter)
+    );
+
+    data.sort((a, b) => {
+      const av = sortCol === 'year' ? a.year : (a[sortCol] || '').toLowerCase();
+      const bv = sortCol === 'year' ? b.year : (b[sortCol] || '').toLowerCase();
+      if (typeof av === 'number') return sortDir === 'asc' ? av - bv : bv - av;
+      return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    });
+
+    const tbody = document.getElementById('table-body');
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="no-results">// no projects match that filter</td></tr>';
+    } else {
+      tbody.innerHTML = data.map(p => `
+        <tr>
+          <td class="col-year">${p.year}</td>
+          <td class="col-name">${
+            p.link
+              ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${p.name}</a>`
+              : p.name
+          }</td>
+          <td class="col-client">${p.client}</td>
+          <td><div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div></td>
+          <td class="col-link">${
+            p.link
+              ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${p.linkLabel}</a>`
+              : '<span class="no-link">—</span>'
+          }</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('count-label').innerHTML =
+      `<span>${data.length}</span> project${data.length !== 1 ? 's' : ''} shown`;
+  }
+
+  /* ── FILTER ── */
+  function applyFilter(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  /* ── SORT ── */
+  function sortBy(col) {
+    if (sortCol === col) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortCol = col;
+      sortDir = col === 'year' ? 'desc' : 'asc';
+    }
+
+    ['year', 'name', 'client'].forEach(c => {
+      const th = document.getElementById('th-' + c);
+      if (th) {
+        th.classList.remove('sorted', 'desc');
+        if (c === col) {
+          th.classList.add('sorted');
+          if (sortDir === 'desc') th.classList.add('desc');
+        }
+      }
+    });
+
+    render();
+  }
+
+  /* ── TYPEWRITER ── */
+  const phrases = [
+    'A complete archive of client builds, demos & experiments',
+    'Hand-coded · Johannesburg, ZA',
+    'Web Dev · Documents · Security',
+    'No frameworks. No bloat.'
+  ];
+
+  const tw = document.getElementById('typewriter');
+  let pi = 0, ci = 0, deleting = false;
+
+  function type() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      tw.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(type, 2000); return; }
+    } else {
+      tw.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+    }
+    setTimeout(type, deleting ? 38 : 72);
+  }
+
+  type();
+
+  /* ── INIT ── */
+  sortBy('year');
+</script>
+
+</body>
+</html>
